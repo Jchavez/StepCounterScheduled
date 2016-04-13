@@ -1,10 +1,13 @@
 package com.dobi.walkingsynth.accelerometer;
 
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+
+import org.achartengine.GraphicalView;
 
 /**
  * Configuring accelerometer and handling its results.
@@ -20,7 +23,7 @@ public class AccelerometerDetector implements SensorEventListener {
     public static final int CONFIG_SENSOR = SensorManager.SENSOR_DELAY_GAME;
 
     private double[] mAccelResult = new double[AccelerometerSignals.count];
-    private AccelerometerGraph mAccelGraph;
+
     private AccelerometerProcessing mAccelProcessing = AccelerometerProcessing.getInstance();
 
     private SensorManager mSensorManager;
@@ -47,8 +50,6 @@ public class AccelerometerDetector implements SensorEventListener {
         } else {
             Log.d(TAG, "Failure! No accelerometer.");
         }
-        // get graph handles
-        mAccelGraph = graph;
     }
 
     public void startDetector() {
@@ -60,7 +61,6 @@ public class AccelerometerDetector implements SensorEventListener {
 
     public void stopDetector() {
         mSensorManager.unregisterListener(this, mAccel);
-        mAccelGraph.reset();
     }
 
     @Override
@@ -75,8 +75,6 @@ public class AccelerometerDetector implements SensorEventListener {
         mAccelResult[1] = mAccelProcessing.calcMagnitudeVector(1);
         //Log.d(TAG, "Vec: x= " + mAccelResult[0] + " C=" + eventMsecTime);
 
-        // update graph with value and timestamp
-        mAccelGraph.invalidate(eventMsecTime, mAccelResult);
 
         // step detection
         if (mAccelProcessing.stepDetected(1)) {

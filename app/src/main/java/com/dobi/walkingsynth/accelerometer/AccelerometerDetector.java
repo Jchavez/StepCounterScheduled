@@ -12,11 +12,13 @@ import android.util.Log;
 public class AccelerometerDetector implements SensorEventListener {
 
     private static final String TAG = AccelerometerDetector.class.getSimpleName();
+
     /**
      * Suggested periods:
      * DELAY_UI: T ~= 60ms => f = 16,6Hz
      * DELAY_GAME: T ~= 20ms => f = 50Hz
      */
+
     public static final int CONFIG_SENSOR = SensorManager.SENSOR_DELAY_GAME;
 
     private double[] mAccelResult = new double[AccelerometerSignals.count];

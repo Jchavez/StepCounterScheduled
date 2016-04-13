@@ -8,16 +8,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
-import com.dobi.walkingsynth.accelerometer.AccelerometerProcessing;
 import com.dobi.walkingsynth.accelerometer.OnStepCountChangeListener;
-import com.dobi.walkingsynth.music.SynthesizerSequencer;
-
-import java.util.ArrayList;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,25 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private AccelerometerDetector mAccelDetector;
     private TextView mStepCountTextView;
 
-    // constant reference
-    private final AccelerometerProcessing mAccelerometerProcessing = AccelerometerProcessing.getInstance();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // set default locale:
-        Locale.setDefault(Locale.ENGLISH);
-
-        // base note spinner:
-        initializeNotesSpinner();
-
-        // scales spinner:
-        initializeScalesSpinner();
-
-        // step intervals spinner:
-        initializeStepsSpinner();
 
         // get and configure text views
         mStepCountTextView = (TextView)findViewById(R.id.stepcount_textView);
@@ -62,34 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 mStepCountTextView.setText(String.valueOf(mStepCount));
             }
         });
-    }
-
-    private void initializeNotesSpinner() {
-        ArrayList<String> notesList = new ArrayList<>();
-        for ( String key : SynthesizerSequencer.notes.keySet())
-        {
-            notesList.add(key);
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,notesList);
-    }
-
-    private void initializeScalesSpinner() {
-        ArrayList<String> scalesList = new ArrayList<>();
-        for ( String key : SynthesizerSequencer.scales.keySet())
-        {
-            scalesList.add(key);
-        }
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,scalesList);
-    }
-
-    private void initializeStepsSpinner() {
-        ArrayList<Integer> stepsList = new ArrayList<>();
-        int l3 = SynthesizerSequencer.stepIntervals.length;
-        for (int i = 0; i < l3; i++)
-        {
-            stepsList.add(SynthesizerSequencer.stepIntervals[i]);
-        }
-        ArrayAdapter<Integer> adapter3 = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,stepsList);
     }
 
     @Override
@@ -115,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
     @Override
     protected void onResume() {

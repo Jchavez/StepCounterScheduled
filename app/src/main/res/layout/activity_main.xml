@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:id="@+id/container_layout"
         android:weightSum="10">
-        
+
         <LinearLayout
             android:id="@+id/info_layout"
             android:orientation="horizontal"

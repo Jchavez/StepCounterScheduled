@@ -1,55 +1,38 @@
 package com.dobi.walkingsynth;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
-import com.dobi.walkingsynth.accelerometer.AccelerometerGraph;
 import com.dobi.walkingsynth.accelerometer.AccelerometerProcessing;
 import com.dobi.walkingsynth.accelerometer.OnStepCountChangeListener;
-import com.dobi.walkingsynth.music.MusicCreator;
 import com.dobi.walkingsynth.music.SynthesizerSequencer;
-import com.dobi.walkingsynth.music.TimeCounter;
-
-import org.achartengine.GraphicalView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Starting point. Sets the whole UI.
- */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private int mStepCount = 0;
     private AccelerometerDetector mAccelDetector;
-    private AccelerometerGraph mAccelGraph;
     private TextView mThreshValTextView;
     private TextView mStepCountTextView;
-    private MusicCreator mMusicCreator;
 
     // constant reference
     private final AccelerometerProcessing mAccelerometerProcessing = AccelerometerProcessing.getInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         // set default locale:
         Locale.setDefault(Locale.ENGLISH);
-
-        // instantiate music analyzer
-        mMusicCreator = new MusicCreator(getResources(),getCacheDir());
-
-        // accelerometer graph setup:
-        mAccelGraph = new AccelerometerGraph(AccelerometerProcessing.THRESH_INIT_VALUE);
 
         // base note spinner:
         initializeNotesSpinner();
@@ -81,25 +58,16 @@ public class MainActivity extends AppCompatActivity {
         mStepCountTextView.setText(String.valueOf(0));
 
 
-        // UI default setup
-        GraphicalView graphicalView = mAccelGraph.getView(this);
-        graphicalView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-
         LinearLayout graphLayout = (LinearLayout)findViewById(R.id.graph_layout);
-        graphLayout.addView(graphicalView);
 
         // initialize accelerometer
         SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        mAccelDetector = new AccelerometerDetector(sensorManager, mAccelGraph);
+        mAccelDetector = new AccelerometerDetector(sensorManager);
         mAccelDetector.setStepCountChangeListener(new OnStepCountChangeListener() {
             @Override
             public void onStepCountChange(long eventMsecTime) {
                 ++mStepCount;
                 mStepCountTextView.setText(String.valueOf(mStepCount));
-                mMusicCreator.getAnalyzer().onStep(eventMsecTime);
-                mMusicCreator.invalidateStep(mStepCount);
             }
         });
 
@@ -149,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double threshold = AccelerometerProcessing.THRESH_INIT_VALUE * (progress + 90) / 100;
                 mAccelerometerProcessing.onThresholdChange(threshold);
-                mAccelGraph.onThresholdChange(threshold);
                 formatThreshTextView(threshold);
             }
 
@@ -200,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mAccelDetector.startDetector();
-        mMusicCreator.startCSound();
     }
 
     @Override
@@ -214,6 +180,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "OnStop");
-        mMusicCreator.destroyCSound();
     }
 }

@@ -1,13 +1,10 @@
 package com.dobi.walkingsynth.accelerometer;
 
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-
-import org.achartengine.GraphicalView;
 
 /**
  * Configuring accelerometer and handling its results.
@@ -39,7 +36,7 @@ public class AccelerometerDetector implements SensorEventListener {
         mStepListener = listener;
     }
 
-    public AccelerometerDetector(SensorManager sensorManager, AccelerometerGraph graph) {
+    public AccelerometerDetector(SensorManager sensorManager) {
         mStepListener = null;
         mSensorManager = sensorManager;
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){

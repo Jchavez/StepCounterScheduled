@@ -1,8 +1,5 @@
 package com.dobi.walkingsynth.accelerometer;
 
-/**
- * Created by dobi on 21.10.15.
- */
 public final class ScalarKalmanFilter {
 
     private double mX0; // predicted state

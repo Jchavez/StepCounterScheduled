@@ -10,6 +10,5 @@ public enum AccelerometerSignals {
     ;
 
     public static final int count = AccelerometerSignals.values().length;
-    public static final String[] OPTIONS = {"|V|","\\u0394g"};
 
 }

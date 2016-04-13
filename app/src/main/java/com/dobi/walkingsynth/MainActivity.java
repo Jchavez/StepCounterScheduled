@@ -5,9 +5,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
@@ -41,30 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 mStepCountTextView.setText(String.valueOf(mStepCount));
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_menu, menu);
-
-        // set string values for menu
-        String[] titles = getResources().getStringArray(R.array.nav_drawer_items);
-        for (int i = 0; i < titles.length; i++) {
-            menu.getItem(i).setTitle(titles[i]);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_threshold:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

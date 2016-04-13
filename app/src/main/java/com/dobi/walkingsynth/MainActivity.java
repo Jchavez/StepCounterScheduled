@@ -48,11 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private AccelerometerGraph mAccelGraph;
     private TextView mThreshValTextView;
     private TextView mStepCountTextView;
-    private TextView mTempoValTextView;
-    private TextView mTimeValTextView;
     private MusicCreator mMusicCreator;
 
-    private TimeCounter mTimer;
     private Handler mHandler = new Handler();
 
     // constant reference
@@ -87,13 +84,7 @@ public class MainActivity extends AppCompatActivity {
         formatThreshTextView(AccelerometerProcessing.THRESH_INIT_VALUE);
         mStepCountTextView = (TextView)findViewById(R.id.stepcount_textView);
         mStepCountTextView.setText(String.valueOf(0));
-        mTempoValTextView = (TextView)findViewById(R.id.tempoval_textView);
-        mTempoValTextView.setText(String.valueOf(mMusicCreator.getAnalyzer().getTempo()));
-        mTimeValTextView = (TextView)findViewById(R.id.timeVal_textView);
 
-        // timer counter
-        mTimer = new TimeCounter(mHandler,mTimeValTextView);
-        mTimer.start();
 
         // UI default setup
         GraphicalView graphicalView = mAccelGraph.getView(this);
@@ -114,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 mStepCountTextView.setText(String.valueOf(mStepCount));
                 mMusicCreator.getAnalyzer().onStep(eventMsecTime);
                 mMusicCreator.invalidateStep(mStepCount);
-                mTempoValTextView.setText(
-                        String.valueOf(mMusicCreator.getAnalyzer().getTempo()));
             }
         });
 
@@ -261,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mAccelDetector.startDetector();
         mMusicCreator.startCSound();
-        mTimer.resume();
     }
 
     @Override
@@ -269,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Log.d(TAG, "OnPause");
         mAccelDetector.stopDetector();
-        mTimer.pause();
     }
 
     @Override

@@ -9,8 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
@@ -18,7 +16,6 @@ import com.dobi.walkingsynth.accelerometer.AccelerometerProcessing;
 import com.dobi.walkingsynth.accelerometer.OnStepCountChangeListener;
 import com.dobi.walkingsynth.music.SynthesizerSequencer;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -28,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int mStepCount = 0;
     private AccelerometerDetector mAccelDetector;
-    private TextView mThreshValTextView;
     private TextView mStepCountTextView;
 
     // constant reference
@@ -52,28 +48,20 @@ public class MainActivity extends AppCompatActivity {
         initializeStepsSpinner();
 
         // get and configure text views
-        mThreshValTextView = (TextView)findViewById(R.id.threshval_textView);
-        formatThreshTextView(AccelerometerProcessing.THRESH_INIT_VALUE);
         mStepCountTextView = (TextView)findViewById(R.id.stepcount_textView);
         mStepCountTextView.setText(String.valueOf(0));
-
-
-        LinearLayout graphLayout = (LinearLayout)findViewById(R.id.graph_layout);
 
         // initialize accelerometer
         SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         mAccelDetector = new AccelerometerDetector(sensorManager);
         mAccelDetector.setStepCountChangeListener(new OnStepCountChangeListener() {
+
             @Override
             public void onStepCountChange(long eventMsecTime) {
                 ++mStepCount;
                 mStepCountTextView.setText(String.valueOf(mStepCount));
             }
         });
-
-        // seek bar configuration
-        initializeSeekBar();
-
     }
 
     private void initializeNotesSpinner() {
@@ -102,39 +90,6 @@ public class MainActivity extends AppCompatActivity {
             stepsList.add(SynthesizerSequencer.stepIntervals[i]);
         }
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,stepsList);
-    }
-
-    /**
-     * SeekBar is the publisher.
-     * The subscribers are: AccelerometerGraph and AccelerometerProcessing instances.
-     */
-    private void initializeSeekBar() {
-        final SeekBar seekBar = (SeekBar)findViewById(R.id.offset_seekBar);
-        seekBar.setMax(130 - 90);
-        seekBar.setProgress((int) AccelerometerProcessing.getInstance().getThresholdValue());
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                double threshold = AccelerometerProcessing.THRESH_INIT_VALUE * (progress + 90) / 100;
-                mAccelerometerProcessing.onThresholdChange(threshold);
-                formatThreshTextView(threshold);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
-
-    private void formatThreshTextView(double v) {
-        final DecimalFormat df = new DecimalFormat("#.##");
-        mThreshValTextView.setText(String.valueOf(df.format(v)));
     }
 
     @Override

@@ -7,103 +7,38 @@
     android:id="@+id/activity_main_layout"
     tools:context=".MainActivity">
 
-    <!-- Main toolbar -->
-
-
-    <!-- Main actions -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container_layout"
         android:weightSum="10">
-
-        <!-- Controls-->
+        
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/info_layout"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/controls_layout"
-            android:layout_weight="2">
+            android:layout_weight="1"
+            android:weightSum="6">
 
-            <!-- buttons, sliders -->
-
-            <LinearLayout
-                android:id="@+id/settings_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:baselineAligned="false"
+            <TextView
                 android:layout_weight="1"
-                android:weightSum="10">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/steps_count"
+                android:textAlignment="center"
+                android:gravity="center" />
 
-                <LinearLayout
-                    android:id="@+id/buttons_layout"
-                    android:orientation="horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0"/>
-
-                <TextView
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="@string/thresh_val"
-                    android:textAlignment="center"
-                    android:gravity="center" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/threshval_textView"
-                    android:gravity="center" />
-
-                <SeekBar
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/offset_seekBar"
-                    android:layout_gravity="center"
-                    android:layout_weight="7"
-                    android:foregroundGravity="center" />
-
-            </LinearLayout>
-
-            <!-- Information layout -->
-            <LinearLayout
-                android:id="@+id/info_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+            <TextView
                 android:layout_weight="1"
-                android:weightSum="6">
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:text="@string/steps_count"
-                    android:textAlignment="center"
-                    android:gravity="center" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/stepcount_textView"
-                    android:gravity="center" />
-
-            </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/stepcount_textView"
+                android:gravity="center" />
 
         </LinearLayout>
 
-        <!-- Achart Engine graph -->
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/graph_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8"/>
     </LinearLayout>
 
 </LinearLayout>

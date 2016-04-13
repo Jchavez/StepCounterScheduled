@@ -1,4 +1,5 @@
 package com.dobi.walkingsynth.accelerometer;
+
 import android.content.Context;
 import android.graphics.Color;
 
@@ -34,8 +35,6 @@ public class AccelerometerGraph implements OnThresholdChangeListener {
     private GraphicalView view;
 
     private int mPointsCount = 0;
-
-    private AccelerometerProcessing mAccelerometerProcessing = AccelerometerProcessing.getInstance();
 
     public AccelerometerGraph(double threshold) {
 

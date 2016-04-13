@@ -40,17 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final String PREFERENCES_NAME = "Values";
-    private static final String PREFERENCES_VALUES_THRESHOLD_KEY = "threshold";
-    private SharedPreferences preferences;
     private int mStepCount = 0;
     private AccelerometerDetector mAccelDetector;
     private AccelerometerGraph mAccelGraph;
     private TextView mThreshValTextView;
     private TextView mStepCountTextView;
     private MusicCreator mMusicCreator;
-
-    private Handler mHandler = new Handler();
 
     // constant reference
     private final AccelerometerProcessing mAccelerometerProcessing = AccelerometerProcessing.getInstance();
@@ -232,18 +227,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_threshold:
-                saveThreshold();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void saveThreshold() {
-        preferences.edit().putFloat(
-                PREFERENCES_VALUES_THRESHOLD_KEY,
-                (float) AccelerometerProcessing.getInstance().getThresholdValue()).apply();
-    }
+
 
     @Override
     protected void onResume() {

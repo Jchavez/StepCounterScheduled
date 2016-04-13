@@ -22,6 +22,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile files('libs/achartengine-1.1.0.jar')
-    compile project(':CsoundAndroid')
+    //compile files('libs/achartengine-1.1.0.jar')
+    //compile project(':CsoundAndroid')
 }

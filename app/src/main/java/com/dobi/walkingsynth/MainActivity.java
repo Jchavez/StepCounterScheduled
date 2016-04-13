@@ -115,19 +115,6 @@ public class MainActivity extends AppCompatActivity {
             notesList.add(key);
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,notesList);
-        Spinner baseNotesSpinner = (Spinner) findViewById(R.id.base_notes_spinner);
-        baseNotesSpinner.setAdapter(adapter);
-        baseNotesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mMusicCreator.invalidateBaseNote(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private void initializeScalesSpinner() {
@@ -137,19 +124,6 @@ public class MainActivity extends AppCompatActivity {
             scalesList.add(key);
         }
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,scalesList);
-        Spinner scalesSpinner = (Spinner) findViewById(R.id.scale_spinner);
-        scalesSpinner.setAdapter(adapter2);
-        scalesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mMusicCreator.invalidateScale(parent.getItemAtPosition(position).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private void initializeStepsSpinner() {
@@ -160,19 +134,6 @@ public class MainActivity extends AppCompatActivity {
             stepsList.add(SynthesizerSequencer.stepIntervals[i]);
         }
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,stepsList);
-        Spinner timeIntervalsSpinner = (Spinner)findViewById(R.id.steps_interval_spinner);
-        timeIntervalsSpinner.setAdapter(adapter3);
-        timeIntervalsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mMusicCreator.invalidateStepInterval(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     /**

@@ -15,8 +15,6 @@ import android.widget.TextView;
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
 
 public class MainActivity extends AppCompatActivity {
-
-    MyReceiver myReceiver;
     private TextView mStepCountTextView;
 
     @Override
@@ -27,13 +25,8 @@ public class MainActivity extends AppCompatActivity {
         mStepCountTextView = (TextView)findViewById(R.id.stepcount_textView);
         mStepCountTextView.setText(String.valueOf(0));
 
-        myReceiver = new MyReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(AccelerometerDetector.MY_ACTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, intentFilter);
 
         startPedometer(10000);
-
         stopPedometer(50000);
     }
 
@@ -55,15 +48,5 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager stopAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         stopAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, stopDelayInMillis, cancellationPendingIntent);
-    }
-
-    public class MyReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int dataPassed = intent.getIntExtra("STEPS", 0);
-
-            mStepCountTextView.setText(String.valueOf(dataPassed));
-        }
     }
 }

@@ -12,13 +12,11 @@ import android.util.Log;
 
 public class AccelerometerDetector extends Service implements SensorEventListener {
 
-    private static final String TAG = AccelerometerDetector.class.getSimpleName();
-
     public static final int CONFIG_SENSOR = SensorManager.SENSOR_DELAY_GAME;
 
-    private double[] mAccelResult = new double[AccelerometerSignals.count];
+    private double[] accelerometerSignals = new double[AccelerometerSignals.count];
 
-    private AccelerometerProcessing mAccelProcessing = AccelerometerProcessing.getInstance();
+    private AccelerometerProcessing accelerometerProcessing = AccelerometerProcessing.getInstance();
 
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -27,25 +25,19 @@ public class AccelerometerDetector extends Service implements SensorEventListene
 
     private int stepsCount = 0;
 
-    public final static String MY_ACTION = "MY_ACTION";
-
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
 
-        Log.i("Notification", "TRIGGER!!");
+        Log.i("START PEDOMETER", "YES!!");
 
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             this.setStepCountChangeListener(new OnStepCountChangeListener() {
 
                 @Override
                 public void onStepCountChange(long eventMsecTime) {
                     ++stepsCount;
-
-                    intent.setAction(MY_ACTION);
-                    intent.putExtra("STEPS", stepsCount);
-                    sendBroadcast(intent);
 
                     Log.i("STEPS", String.valueOf(stepsCount));
                 }
@@ -55,9 +47,8 @@ public class AccelerometerDetector extends Service implements SensorEventListene
             this.startDetector();
 
         } else {
-            Log.d(TAG, "Failure! No accelerometer.");
+            Log.d("FAIL", "Failure! No accelerometer.");
         }
-
 
         return START_STICKY;
     }
@@ -74,7 +65,7 @@ public class AccelerometerDetector extends Service implements SensorEventListene
 
     public void startDetector() {
         if (!sensorManager.registerListener(this, sensor, CONFIG_SENSOR)) {
-            Log.d(TAG,"The sensor is not supported and unsuccessfully enabled.");
+            Log.d("FAIL","The sensor is not supported and unsuccessfully enabled.");
         }
     }
 
@@ -84,18 +75,17 @@ public class AccelerometerDetector extends Service implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mAccelProcessing.setEvent(event);
-        final long eventMsecTime = mAccelProcessing.timestampToMilliseconds();
+        accelerometerProcessing.setEvent(event);
+        final long eventMsecTime = accelerometerProcessing.timestampToMilliseconds();
 
-        mAccelResult[0] = mAccelProcessing.calcMagnitudeVector(0);
-        mAccelResult[0] = mAccelProcessing.calcExpMovAvg(0);
-        mAccelResult[1] = mAccelProcessing.calcMagnitudeVector(1);
+        accelerometerSignals[0] = accelerometerProcessing.calcMagnitudeVector(0);
+        accelerometerSignals[0] = accelerometerProcessing.calcExpMovAvg(0);
+        accelerometerSignals[1] = accelerometerProcessing.calcMagnitudeVector(1);
         //Log.d(TAG, "Vec: x= " + mAccelResult[0] + " C=" + eventMsecTime);
 
         // step detection
-        if (mAccelProcessing.stepDetected(1)) {
+        if (accelerometerProcessing.stepDetected(1)) {
             // step is found!
-
             // notify potential listeners
             if (onStepCountChangeListener != null)
                 onStepCountChangeListener.onStepCountChange(eventMsecTime);

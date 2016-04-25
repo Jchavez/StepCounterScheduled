@@ -11,7 +11,7 @@ public class CancelPedometerBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("Cancel Pedometer", "YES!!");
+        Log.i("CANCEL PEDOMETER", "YES!!");
 
         context.stopService(new Intent(context, AccelerometerDetector.class));
     }

@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CsoundAndroid/CsoundAndroid.iml" filepath="$PROJECT_DIR$/CsoundAndroid/CsoundAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WalkingSynthModify.iml" filepath="$PROJECT_DIR$/WalkingSynthModify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StepCounterScheduled.iml" filepath="$PROJECT_DIR$/StepCounterScheduled.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

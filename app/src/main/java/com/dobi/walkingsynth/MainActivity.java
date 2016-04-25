@@ -1,21 +1,22 @@
 package com.dobi.walkingsynth;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.hardware.SensorManager;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
-import com.dobi.walkingsynth.accelerometer.OnStepCountChangeListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    private int mStepCount = 0;
-    private AccelerometerDetector mAccelDetector;
+    MyReceiver myReceiver;
     private TextView mStepCountTextView;
 
     @Override
@@ -23,39 +24,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get and configure text views
         mStepCountTextView = (TextView)findViewById(R.id.stepcount_textView);
         mStepCountTextView.setText(String.valueOf(0));
 
-        // initialize accelerometer
-        SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        mAccelDetector = new AccelerometerDetector(sensorManager);
-        mAccelDetector.setStepCountChangeListener(new OnStepCountChangeListener() {
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(AccelerometerDetector.MY_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, intentFilter);
 
-            @Override
-            public void onStepCountChange(long eventMsecTime) {
-                ++mStepCount;
-                mStepCountTextView.setText(String.valueOf(mStepCount));
-            }
-        });
+        startPedometer(10000);
+
+        stopPedometer(50000);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mAccelDetector.startDetector();
+    private void startPedometer(int startDelay) {
+        Intent accelerometerDetectorIntent = new Intent(this, AccelerometerDetector.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, accelerometerDetectorIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long startDelayInMillis = SystemClock.elapsedRealtime() + startDelay;
+
+        AlarmManager startAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        startAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, startDelayInMillis, pendingIntent);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "OnPause");
-        mAccelDetector.stopDetector();
+    private void stopPedometer(int stopDelay) {
+        Intent cancelPedometerBroadcastReceiverIntent = new Intent(this, CancelPedometerBroadcastReceiver.class);
+        PendingIntent cancellationPendingIntent = PendingIntent.getBroadcast(this, 0, cancelPedometerBroadcastReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long stopDelayInMillis = SystemClock.elapsedRealtime() + stopDelay;
+
+        AlarmManager stopAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        stopAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, stopDelayInMillis, cancellationPendingIntent);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "OnStop");
+    public class MyReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int dataPassed = intent.getIntExtra("STEPS", 0);
+
+            mStepCountTextView.setText(String.valueOf(dataPassed));
+        }
     }
 }

@@ -67,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.BROADCAST_ACTION)){
-                Log.i("LISTENING BROADCAST", "YES");
+                //intent.getDataString();
+                CharSequence intentData = intent.getCharSequenceExtra(Constants.EXTENDED_DATA_STATUS);
+                Log.i("LISTENING BROADCAST", String.valueOf(intentData));
+                mStepCountTextView.setText(intentData);
             }
         }
     }

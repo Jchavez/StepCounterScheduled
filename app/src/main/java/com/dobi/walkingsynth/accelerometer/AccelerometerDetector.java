@@ -29,15 +29,16 @@ public class AccelerometerDetector extends Service implements SensorEventListene
 
     private int stepsCount = 0;
 
-    Intent stepsCountMessage;
+    Intent stepsCountMessageIntent;
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
 
         Log.i("START PEDOMETER", "YES!!");
 
-        stepsCountMessage = new Intent(Constants.BROADCAST_ACTION);
+        stepsCountMessageIntent = new Intent(Constants.BROADCAST_ACTION);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             this.setStepCountChangeListener(new OnStepCountChangeListener() {
@@ -46,8 +47,8 @@ public class AccelerometerDetector extends Service implements SensorEventListene
                 public void onStepCountChange(long eventMsecTime) {
                     ++stepsCount;
 
-                    stepsCountMessage.putExtra(Constants.EXTENDED_DATA_STATUS, String.valueOf(stepsCount));
-                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(stepsCountMessage);
+                    stepsCountMessageIntent.putExtra(Constants.EXTENDED_DATA_STATUS, String.valueOf(stepsCount));
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(stepsCountMessageIntent);
 
                     Log.i("STEPS", String.valueOf(stepsCount));
                 }

@@ -17,10 +17,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".CancelPedometerBroadcastReceiver" />
-        <receiver android:name=".MainActivity$MyReceiver" />
+
         <service android:name=".PedometerService" android:exported="false"/>
         <service android:name=".accelerometer.AccelerometerDetector" android:exported="false"/>
+
+        <receiver android:name=".CancelPedometerBroadcastReceiver" />
+
+        <receiver android:name=".MainActivity$ReceiveStepsCounterMessage">
+            <intent-filter>
+                <action android:name="com.dobi.walkingsynth.Constants.BROADCAST_ACTION"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

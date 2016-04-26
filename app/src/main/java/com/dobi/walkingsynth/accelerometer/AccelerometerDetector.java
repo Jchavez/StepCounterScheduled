@@ -8,7 +8,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.dobi.walkingsynth.Constants;
+import com.dobi.walkingsynth.MainActivity;
 
 public class AccelerometerDetector extends Service implements SensorEventListener {
 
@@ -25,11 +29,14 @@ public class AccelerometerDetector extends Service implements SensorEventListene
 
     private int stepsCount = 0;
 
+    Intent stepsCountMessage;
+
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
 
         Log.i("START PEDOMETER", "YES!!");
 
+        stepsCountMessage = new Intent(Constants.BROADCAST_ACTION);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -38,6 +45,9 @@ public class AccelerometerDetector extends Service implements SensorEventListene
                 @Override
                 public void onStepCountChange(long eventMsecTime) {
                     ++stepsCount;
+
+                    stepsCountMessage.putExtra(Constants.EXTENDED_DATA_STATUS, String.valueOf(stepsCount));
+                    LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(stepsCountMessage);
 
                     Log.i("STEPS", String.valueOf(stepsCount));
                 }

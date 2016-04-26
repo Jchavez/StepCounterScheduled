@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.dobi.walkingsynth.accelerometer.AccelerometerDetector;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mStepCountTextView;
+
+    ReceiveStepsCounterMessage receiveStepsCounterMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
         startPedometer(10000);
         stopPedometer(50000);
+
+        receiveStepsCounterMessage = new ReceiveStepsCounterMessage();
+
+        IntentFilter mStatusIntentFilter = new IntentFilter(
+            Constants.BROADCAST_ACTION);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            receiveStepsCounterMessage,
+            mStatusIntentFilter);
     }
 
     private void startPedometer(int startDelay) {
@@ -48,5 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager stopAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         stopAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, stopDelayInMillis, cancellationPendingIntent);
+    }
+
+    public class ReceiveStepsCounterMessage extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.BROADCAST_ACTION)){
+                Log.i("LISTENING BROADCAST", "YES");
+            }
+        }
     }
 }
